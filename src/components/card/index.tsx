@@ -1,13 +1,6 @@
-import React from "react";
 import { CardType } from "src/types";
-import styled from "styled-components";
+import { Component } from "./styles";
 
-const Component = styled.div`
-  background-color: white;
-  color: black;
-  border-radius: 8px;
-  padding: 10px;
-`;
 type Props = {
   card: CardType;
 };
