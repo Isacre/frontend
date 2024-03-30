@@ -16,7 +16,7 @@ padding: 0;
 height: 100vh;
 width: 100vw; 
 box-sizing: border-box;
-font-family: Lato;
+font-family: Arial;
 background-color: RGB(26 27 49);
 
 a{ 

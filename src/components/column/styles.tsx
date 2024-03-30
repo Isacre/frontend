@@ -27,7 +27,6 @@ export const Component = styled.div`
   }
 `;
 export const ColumnName = styled.b`
-  font-family: Arial;
   font-weight: bold;
 `;
 export const CardsWrapper = styled.div`

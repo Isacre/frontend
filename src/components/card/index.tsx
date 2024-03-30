@@ -7,5 +7,9 @@ type Props = {
 
 export default function Card({ card }: Props) {
   const { title } = card;
-  return <Component>{title}</Component>;
+  return (
+    <Component>
+      <p>{title}</p>
+    </Component>
+  );
 }
