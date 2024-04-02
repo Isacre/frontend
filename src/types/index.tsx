@@ -16,5 +16,3 @@ export declare type CardType = {
   updated_at: string;
   created_at: string;
 };
-
-export declare type CreateCardType = { title: string; description: string; column: number };

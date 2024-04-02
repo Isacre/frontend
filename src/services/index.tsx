@@ -1,5 +1,6 @@
 import axios from "axios";
-import { CardType, ColumType, CreateCardType } from "../types";
+import { CardType, ColumType } from "../types";
+import { CreateCardType, SwitchCardPositionTypes } from "./types";
 const url = process.env.REACT_APP_API_URL;
 const config = {
   headers: {
@@ -18,7 +19,12 @@ export async function postColumn(title: string): Promise<ColumType> {
   return column.data;
 }
 
-export async function postCard({ title, column, description }: CreateCardType): Promise<CardType> {
-  const card = await axios.post(`${url}cards/`, { title, column, description }, config);
+export async function postCard(body: CreateCardType): Promise<CardType> {
+  const card = await axios.post(`${url}cards/`, body, config);
+  return card.data;
+}
+
+export async function changeCardPosition(body: SwitchCardPositionTypes): Promise<string> {
+  const card = await axios.post(`${url}cards/change_card_position/`, body, config);
   return card.data;
 }

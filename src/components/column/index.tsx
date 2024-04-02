@@ -1,58 +1,48 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { ColumType } from "src/types";
 import { FaPlus } from "react-icons/fa";
-import { AddCardButton, CardsWrapper, ColumnName, Component } from "./styles";
-import { Component as FakeCard } from "src/components/card/styles";
-import { useOnBlur } from "src/hooks/useOnBlur";
+import { AddCardButton, CardsWrapper, ColumnContainer } from "./styles";
 import Card from "../card";
+import { Droppable } from "@hello-pangea/dnd";
+import FakeCard from "../fakeCard";
+import { postCard } from "src/services";
+import { QueryObserverResult, RefetchOptions, useMutation } from "@tanstack/react-query";
 
-export default function Column({ title, cards }: ColumType) {
+interface Props {
+  column: ColumType;
+  refetch: (options?: RefetchOptions | undefined) => Promise<QueryObserverResult<ColumType[], Error>>;
+}
+export default function Column({ column, refetch }: Props) {
+  const { cards, id, title } = column;
   const [CreatingCard, setCreatingCard] = useState(false);
-  const [CardTitle, setCardTitle] = useState("");
-  const FakeCardRef = useRef<any>();
 
-  function handleCreateCardButton() {
-    setCreatingCard(true);
-  }
-
-  function handleCreatingCard() {
-    if (CardTitle.length === 0) {
-      setCreatingCard(false);
-      return;
-    }
-  }
-
-  useOnBlur({
-    callback: () => {
-      handleCreatingCard();
+  const createCardMutation = useMutation({
+    mutationFn: async (cardTitle: string) => {
+      return await postCard({ column: id, title: cardTitle }).then((res) => res);
     },
-    elementRef: FakeCardRef,
-    dependencies: [],
+    onSuccess: () => {
+      refetch();
+    },
   });
 
-  useEffect(() => {
-    if (CreatingCard) {
-      FakeCardRef.current.focus();
-    }
-  }, [CreatingCard]);
-
   return (
-    <Component>
-      <ColumnName>{title}</ColumnName>
-      <CardsWrapper>
-        {cards.map((card) => (
-          <Card key={card.id} card={card} />
-        ))}
-        {CreatingCard && (
-          <FakeCard>
-            <input ref={FakeCardRef} value={CardTitle} onChange={(e) => setCardTitle(e.target.value)} />
-          </FakeCard>
-        )}
-      </CardsWrapper>
-      <AddCardButton onClick={handleCreateCardButton}>
-        <FaPlus />
-        <p>Adicionar um cartão</p>
-      </AddCardButton>
-    </Component>
+    <Droppable droppableId={`${id}`} type="list" direction="vertical">
+      {(provided) => (
+        <ColumnContainer {...provided.droppableProps} ref={provided.innerRef}>
+          <b>{title}</b>
+          <CardsWrapper>
+            {cards.map((card, index) => (
+              <Card index={index} key={card.id} card={card} />
+            ))}
+            {provided.placeholder}
+            <FakeCard submitFn={(title) => createCardMutation.mutate(title)} isOpen={CreatingCard} setIsOpen={setCreatingCard} />
+          </CardsWrapper>
+          <AddCardButton onClick={() => setCreatingCard(true)}>
+            <FaPlus />
+            <p>Adicionar um cartão</p>
+          </AddCardButton>
+        </ColumnContainer>
+      )}
+    </Droppable>
   );
 }
