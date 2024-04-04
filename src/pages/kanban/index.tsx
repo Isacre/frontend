@@ -2,9 +2,9 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { changeCardPosition, getColumns } from "src/services";
 import { TriagilLogo, Wrapper } from "./styles";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
+import { ToastContainer, toast } from "react-toastify";
 import Column from "src/components/column";
 import LoadingScreen from "src/components/loadingScreen";
-import { ToastContainer } from "react-toastify";
 import logo from "src/assets/triagil.png";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -12,7 +12,7 @@ export default function Kanban() {
   const { data, isLoading, refetch } = useQuery({ queryKey: ["kanbam"], queryFn: getColumns });
   const client = useQueryClient();
 
-  const onDragEndMutation = useMutation({
+  const mutateCardPosition = useMutation({
     mutationFn: async (result: DropResult) => {
       const { destination, source } = result;
       if (!destination) {
@@ -32,7 +32,7 @@ export default function Kanban() {
       if (!result.destination) {
         return;
       } else {
-        if (data !== undefined) {
+        if (data) {
           const sourceColumnIndex = data.findIndex((column) => column.id.toString() === result.source.droppableId);
           const destinationColumnIndex = data.findIndex((column) => column.id.toString() === result.destination!.droppableId);
           const sourceColumnCards = data[sourceColumnIndex].cards;
@@ -47,6 +47,9 @@ export default function Kanban() {
       refetch();
       client.invalidateQueries({ queryKey: ["kanbam"] });
     },
+    onError: () => {
+      toast.error("Não foi possível salvar a alteração nos cards");
+    },
   });
 
   if (isLoading) return <LoadingScreen />;
@@ -54,7 +57,7 @@ export default function Kanban() {
   return (
     <Wrapper>
       <ToastContainer />
-      <DragDropContext onDragEnd={(result) => onDragEndMutation.mutate(result)}>
+      <DragDropContext onDragEnd={(result) => mutateCardPosition.mutate(result)}>
         {data?.map((column) => (
           <Column key={column.id} column={column} />
         ))}

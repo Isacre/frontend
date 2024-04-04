@@ -1,7 +1,9 @@
 import axios from "axios";
-import { CardType, ColumnType } from "../types";
+import { CardType, ColumnType } from "src/types";
 import { CreateCardType, SwitchCardPositionTypes } from "./types";
+
 const url = process.env.REACT_APP_API_URL;
+
 const config = {
   headers: {
     "Content-Type": "application/json",
