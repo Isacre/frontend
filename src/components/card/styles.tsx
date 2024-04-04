@@ -6,6 +6,9 @@ export const Component = styled.div`
   border-radius: 8px;
   padding: 10px;
   cursor: grab;
+  justify-content: space-between;
+  display: flex;
+  align-items: center;
 
   input {
     border: none;
@@ -13,5 +16,7 @@ export const Component = styled.div`
     width: 100%;
     height: 100%;
     font-size: 16px;
+    line-height: 30px;
+    padding: 3px 0px;
   }
 `;
