@@ -1,4 +1,4 @@
-export declare type ColumType = {
+export declare type ColumnType = {
   id: number;
   index: number;
   title: string;
@@ -12,7 +12,8 @@ export declare type CardType = {
   column: number;
   index: number;
   title: string;
-  description: string;
-  updated_at: string;
-  created_at: string;
+  description?: string;
+  updated_at?: string;
+  created_at?: string;
+  is_fake?: boolean;
 };

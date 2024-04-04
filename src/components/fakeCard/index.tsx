@@ -11,7 +11,8 @@ type Props = {
 
 export default function FakeCard({ isOpen, submitFn, setIsOpen }: Props) {
   const [Value, setValue] = useState("");
-  const FakeCardRef = useRef<any>();
+  const FakeCardInputRef = useRef<any>();
+  const WrapperRef = useRef<any>();
 
   function handleResetingInput() {
     setValue("");
@@ -20,39 +21,39 @@ export default function FakeCard({ isOpen, submitFn, setIsOpen }: Props) {
 
   function handleCreatingCard() {
     if (Value.length === 0) {
-      console.log("aq");
       setIsOpen(false);
       return;
     }
-    console.log("aa");
-
     submitFn(Value);
     handleResetingInput();
   }
 
-  // create card on blur
+  // closes card creation input on clicking outside of the div
   useOnBlur({
-    callback: handleCreatingCard,
-    elementRef: FakeCardRef,
+    callback: () => {
+      setValue("");
+      setIsOpen(false);
+    },
+    elementRef: WrapperRef,
     dependencies: [],
   });
 
   // focus input on open
   useEffect(() => {
     if (isOpen) {
-      FakeCardRef.current.focus();
+      FakeCardInputRef.current.focus();
     }
   }, [isOpen]);
 
   if (isOpen) {
     return (
-      <FakeCardWrapper>
+      <FakeCardWrapper ref={WrapperRef}>
         <input
           onKeyDown={(e) => {
             onEnter(e, handleCreatingCard);
             onEscape(e, handleResetingInput);
           }}
-          ref={FakeCardRef}
+          ref={FakeCardInputRef}
           value={Value}
           onChange={(e) => setValue(e.target.value)}
         />
@@ -62,12 +63,3 @@ export default function FakeCard({ isOpen, submitFn, setIsOpen }: Props) {
     return null;
   }
 }
-
-/*    postCard({ column: id, description: "a", title: Value })
-          .then((res) => {
-            handleResetingInput();
-            console.log(res);
-          })
-          .catch((err) => {
-            console.log(err);
-          }); */

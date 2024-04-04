@@ -6,6 +6,7 @@ export const ColumnContainer = styled.div`
   background-color: #5490fc;
   color: white;
   width: 300px;
+  min-width: 300px;
   height: fit-content;
   border-radius: 8px;
   gap: 5px;
