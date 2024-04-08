@@ -1,3 +1,4 @@
+import React from "react";
 import { CardType } from "src/types";
 import { Component } from "./styles";
 import { Draggable } from "@hello-pangea/dnd";

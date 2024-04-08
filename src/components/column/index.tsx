@@ -1,10 +1,10 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { ColumnType } from "src/types";
 import { FaPlus } from "react-icons/fa";
 import { AddCardButton, CardsWrapper, ColumnContainer } from "./styles";
-import Card from "../card";
+import Card from "src/components/card";
 import { Droppable } from "@hello-pangea/dnd";
-import FakeCard from "../fakeCard";
+import FakeCard from "src/components/fakeCard";
 import { deleteCard, postCard } from "src/services";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";

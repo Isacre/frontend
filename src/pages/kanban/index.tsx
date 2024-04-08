@@ -1,3 +1,5 @@
+import React from "react";
+
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { changeCardPosition, getColumns } from "src/services";
 import { TriagilLogo, Wrapper } from "./styles";
